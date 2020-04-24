@@ -15,6 +15,11 @@ Para executar este projeto é preciso ter alguns binarios instalado na maquina l
 - Make
 
 ## Uso unico comando
+Clonar o projeto no seu diretorio de preferencia, acessar o diretorio terraform
+
+```bash
+git clone https://github.com/fabiocruzcoelho/desafios-devops.git
+```
 
 - make deploy
 
@@ -24,10 +29,6 @@ Para executar este projeto é preciso ter alguns binarios instalado na maquina l
 - make make helm.deploy
 - make test
 - make helm.delete
-
-## Destroy
-
-- minikube delete
 
 ```bash
 kubectl get po,deploy,svc,ep,ing -n desafio-idwall        
@@ -47,6 +48,10 @@ endpoints/node-app-auto-deploy   172.18.0.5:3000,172.18.0.6:3000   5m49s
 NAME                                      CLASS    HOSTS              ADDRESS      PORTS   AGE
 ingress.extensions/node-app-auto-deploy   <none>   hello-node.local   172.17.0.2   80      5m49s
 ```
+
+## Destroy
+
+- minikube delete
 
 ## Url de acesso
 
