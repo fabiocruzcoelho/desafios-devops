@@ -2,31 +2,52 @@
 
 ## Motivação
 
-Kubernetes atualmente é a principal ferramenta de orquestração e _deployment_ de _containers_ utilizado no mundo, práticamente tornando-se um padrão para abstração de recursos de infraestrutura. 
+Kubernetes atualmente é a principal ferramenta de orquestração e _deployment_ de _containers_ utilizado no mundo, práticamente tornando-se um padrão para abstração de recursos de infraestrutura.
 
-Na IDWall todos nossos serviços são containerizados e distribuídos em _clusters_ para cada ambiente, sendo assim é importante que as aplicações sejam adaptáveis para cada ambiente e haja controle via código dos recursos kubernetes através de seus manifestos. 
+## Requerido
 
-## Objetivo
-Dentro deste repositório existe um subdiretório **app** e um **Dockerfile** que constrói essa imagem, seu objetivo é:
+Para executar este projeto é preciso ter alguns binarios instalado na maquina local.
 
-- Construir a imagem docker da aplicação
-- Criar os manifestos de recursos kubernetes para rodar a aplicação (_deployments, services, ingresses, configmap_ e qualquer outro que você considere necessário)
-- Criar um _script_ para a execução do _deploy_ em uma única execução.
-- A aplicação deve ter seu _deploy_ realizado com uma única linha de comando em um cluster kubernetes **local**
-- Todos os _pods_ devem estar rodando
-- A aplicação deve responder à uma URL específica configurada no _ingress_
+- helm (3.2x) [info](https://github.com/helm/helm/releases/tag/v3.2.0)
+- Minikube
+- Kubectl
+- Docker
+- Make
 
+## Uso unico comando
 
-## Extras 
-- Utilizar Helm [HELM](https://helm.sh)
-- Divisão de recursos por _namespaces_
-- Utilização de _health check_ na aplicação
-- Fazer com que a aplicação exiba seu nome ao invés de **"Olá, candidato!"**
+- make deploy
 
-## Notas
+## Uso comando por comando
 
-* Pode se utilizar o [Minikube](https://github.com/kubernetes/minikube) ou [Docker for Mac/Windows](https://docs.docker.com/docker-for-mac/) para execução do desafio e realização de testes.
+- make docker.build
+- make make helm.deploy
+- make test
+- make helm.delete
 
-* A aplicação sobe por _default_ utilizando a porta **3000** e utiliza uma variável de ambiente **$NAME**
+## Destroy
 
-* Não é necessário realizar o _upload_ da imagem Docker para um registro público, você pode construir a imagem localmente e utilizá-la diretamente.
+- minikube delete
+
+```bash
+kubectl get po,deploy,svc,ep,ing -n desafio-idwall        
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/node-app-7bb5fc7d6b-qkfbs   1/1     Running   0          5m49s
+pod/node-app-7bb5fc7d6b-rfsbf   1/1     Running   0          5m49s
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/node-app   2/2     2            2           5m49s
+
+NAME                           TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/node-app-auto-deploy   NodePort   10.104.138.22   <none>        80:32159/TCP   5m49s
+
+NAME                             ENDPOINTS                         AGE
+endpoints/node-app-auto-deploy   172.18.0.5:3000,172.18.0.6:3000   5m49s
+
+NAME                                      CLASS    HOSTS              ADDRESS      PORTS   AGE
+ingress.extensions/node-app-auto-deploy   <none>   hello-node.local   172.17.0.2   80      5m49s
+```
+
+## Url de acesso
+
+- http://hello-node.local/

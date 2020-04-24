@@ -2,25 +2,53 @@
 
 ## Motivação
 
-Recursos de infraestrutura em nubvem devem sempre ser criados utilizando gerenciadores de configuração, tais como [Cloudformation](https://aws.amazon.com/cloudformation/), [Terraform](https://www.terraform.io/) ou [Ansible](https://www.ansible.com/), garantindo que todo recurso possa ser versionado e recriado de forma facilitada.
+Recursos de infraestrutura em nubvem devem sempre ser criados utilizando gerenciadores de configuração, tais como Cloudformation, Terraform ou Ansible, garantindo que todo recurso possa ser versionado e recriado de forma facilitada.
 
-## Objetivo
+Este repo faz o deploy de uma instância amazon Linux com container httpd rondando na porta 80, utilizando o `terraform` e suas melhores praticas dentro da cloud da aws.
 
-- Criar uma instância **n1-standard-1** (GCP) ou **t2.micro** (AWS) Linux utilizando **Terraform**.
-- A instância deve ter aberta somente às portas **80** e **443** para todos os endereços
-- A porta SSH (**22**) deve estar acessível somente para um _range_ IP definido.
-- **Inputs:** A execução do projeto deve aceitar dois parâmetros:
-  - O IP ou _range_ necessário para a liberação da porta SSH
-  - A região da _cloud_ em que será provisionada a instância
-- **Outputs:** A execução deve imprimir o IP público da instância
+## Requerido
 
+Para executar o mesmo, é preciso ter alguns pacotes instalados e configurados na maquina local.
 
-## Extras
+- Credentials aws
+- Terraform
+- Make
 
-- Pré-instalar o docker na instância que suba automáticamente a imagem do [Apache](https://hub.docker.com/_/httpd/), tornando a página padrão da ferramenta visualizável ao acessar o IP público da instância
-- Utilização de módulos do Terraform
+- Exportar as credentials aws, ou instalar o binario `awscli` devidamente configurado com suas  `access key` e `secret key`
 
-## Notas
-- Pode se utilizar tanto AWS quanto GCP (Google Cloud), não é preciso executar o teste em ambas, somente uma.
-- Todos os recursos devem ser criados utilizando os créditos gratuitos da AWS/GCP.
-- Não esquecer de destruir os recursos após criação e testes do desafio para não haver cobranças ou esgotamento dos créditos.
+```bash
+- export AWS_ACCESS_KEY_ID='xxxxxxx'
+- export AWS_SECRET_ACCESS_KEY='xxxxxxxxxxx'
+```
+
+## Uso
+
+Clonar o projeto no seu diretorio de preferencia, acessar o diretorio `terraform`
+
+```bash
+git clone https://github.com/fabiocruzcoelho/desafios-devops.git
+```
+
+- `Terraform cli`
+
+```bash
+terraform init
+terraform plan
+terraform apply -auto-approve
+```
+
+- `Make`
+
+```bash
+make deploy
+```
+
+### Exemplo Inputs
+
+- Qual range de IP deseja liberar para acesso SSH? 
+  - `200.200.200.200/32`
+
+- Qual regiao deseja utilizar?
+  - `us-west-2`
+
+Observe que este exemplo pode criar recursos que custam dinheiro. Execute `terraform destroy -auto-approve` ou `make destroy` quando você não precisar desses recursos.
